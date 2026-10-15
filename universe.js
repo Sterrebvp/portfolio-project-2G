@@ -59,7 +59,7 @@
     if (state !== 'transition') return;
     clearTimeout(timer);
     flight = 0;
-    root.classList.remove('is-travelling','is-fading');
+    root.classList.remove('is-travelling','is-fading','is-reduced-transition');
     showPortfolio();
     history.replaceState(null,'','#work');
     const old = document.documentElement.style.scrollBehavior;
@@ -69,6 +69,18 @@
     const heading=work.querySelector('h2');
     heading.setAttribute('tabindex','-1'); heading.focus({preventScroll:true});
   };
+  const finishCalmly = () => {
+    if (state !== 'transition') return;
+    clearTimeout(timer);
+    flight = 0;
+    root.classList.remove('is-travelling','is-fading');
+    root.classList.add('is-reduced-transition');
+    const old = document.documentElement.style.scrollBehavior;
+    document.documentElement.style.scrollBehavior='auto';
+    introDetails.scrollIntoView({behavior:'instant',block:'start'});
+    document.documentElement.style.scrollBehavior=old;
+    timer = setTimeout(finish, 260);
+  };
   const enterIntro = () => {
     clearTimeout(timer);
     state = 'intro';
@@ -76,7 +88,7 @@
     time = 0;
     mouse.fill(0);
     target.fill(0);
-    root.classList.remove('is-travelling','is-fading');
+    root.classList.remove('is-travelling','is-fading','is-reduced-transition');
     lockPage();
     history.replaceState(null,'','#home');
     window.scrollTo({top:0,behavior:'instant'});
@@ -98,7 +110,7 @@
     state = 'transition';
     lockPage();
     if (reduce.matches) {
-      finish();
+      finishCalmly();
       return;
     }
     flight = 0;
@@ -117,7 +129,7 @@
   }));
   root.addEventListener('pointermove',e=>{ const r=root.getBoundingClientRect();target[0]=(e.clientX-r.left)/r.width-.5;target[1]=.5-(e.clientY-r.top)/r.height; });
   root.addEventListener('pointerleave',()=>target.fill(0));
-  reduce.addEventListener('change',()=>{paused=reduce.matches;if(paused&&state==='transition')finish();start();});
+  reduce.addEventListener('change',()=>{paused=reduce.matches;if(paused&&state==='transition')finishCalmly();start();});
   if(!gl){canvas.hidden=true;return;}
   const vertex=`attribute vec2 position;void main(){gl_Position=vec4(position,0.,1.);}`;
   const fragment=`precision highp float;

@@ -18,6 +18,7 @@ html.universe-opening .universe { position:fixed; z-index:250; inset:0; width:10
 .universe + .hero-details .hero-intro { grid-template-columns: minmax(0, 1fr); gap: 0; }
 .universe.is-travelling .universe-content {opacity:0;transform:scale(1.04);pointer-events:none;}
 .universe.is-fading canvas {opacity:0;}
+.universe.is-reduced-transition {opacity:0;transition:opacity .24s ease-out!important;}
 .universe + .hero-details {position:relative;z-index:1;background:#111015;color:#f1eef5;padding:32px max(24px,calc((100vw - 1260px)/2));}
 .universe + .hero-details p {color:#dbd7e2;}
 .universe + .hero-details .internship-availability {color:#ceb7f3;}
